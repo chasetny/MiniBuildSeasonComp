@@ -85,6 +85,7 @@ public class SwerveModule {
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveMotorVelocityConversionFactor;
     } 
 
+    
     public double getTurningVelocity(){
         return turningEncoder.getVelocity();
     }
