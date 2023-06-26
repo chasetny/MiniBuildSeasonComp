@@ -53,7 +53,7 @@ public class SwerveModule {
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
         //Pid
-        turningPidController = new PIDController(0.7, 0, 0);
+        turningPidController = new PIDController(0.6, 0, 0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
         
         //Configuring parts
@@ -69,8 +69,14 @@ public class SwerveModule {
         //Inverse Motors?
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
-
-        resetEncoders();
+       
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                resetEncoders();;
+            } catch (Exception e) {
+            }
+        }).start();
     }
 
     public double getDrivePosition(){
@@ -85,14 +91,12 @@ public class SwerveModule {
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveMotorVelocityConversionFactor;
     } 
 
-    
     public double getTurningVelocity(){
         return turningEncoder.getVelocity();
     }
 
     public double getAbsoluteEncoderRad(){
        return absoluteEncoder.getAbsolutePosition()*Math.PI/180;
-       
     }
 
     public SwerveModulePosition getPosition(){

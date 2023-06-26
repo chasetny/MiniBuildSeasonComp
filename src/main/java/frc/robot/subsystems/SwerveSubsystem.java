@@ -53,6 +53,7 @@ public class SwerveSubsystem extends SubsystemBase{
             DriveConstants.kBackRightTurningMotorReversed);
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
+    
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), 
