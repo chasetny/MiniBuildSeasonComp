@@ -46,7 +46,7 @@ public final class Constants {
 
     public static final int kFrontLeftDriveMotorPort = 40;
     public static final int kFrontRightDriveMotorPort = 10;
-    public static final int kBackLeftDriveMotorPort = 1; //46
+    public static final int kBackLeftDriveMotorPort = 4; //46
     public static final int kBackRightDriveMotorPort = 47;
 
     public static final int kFrontLeftTurningMotorPort = 14;
@@ -96,13 +96,21 @@ public final class Constants {
   }
 
   public static final class ClawConstants {
+    public static final int forwardChannel = 2;
+    public static final int reverseChannel = 4;
   }
 
   public static final class IntakeConstants {
-
+    public static final int intakeMotorID = 0;
+    public static final double intakeForwardSpeed = 0.5;
+    public static final double intakeReverseSpeed = -0.5;
   }
 
   public static final class ElevatorConstants {
+    public static final int elevatorMotorID = 1;
+  }
 
+  public static final class ArmConstants{
+    public static final int armMotorID = 6;
   }
 }

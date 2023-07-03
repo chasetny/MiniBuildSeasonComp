@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.ArmHigh;
+import frc.robot.commands.ArmMid;
+import frc.robot.commands.ArmZeroPosition;
 import frc.robot.commands.ClawClosed;
 import frc.robot.commands.ClawOpen;
 import frc.robot.commands.ElevatorHighPosition;
@@ -35,6 +38,7 @@ import frc.robot.commands.IntakeZero;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -46,8 +50,10 @@ public class RobotContainer {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
 
   private final Joystick driverJoystick = new Joystick(0);
+  private final Joystick operJoystick = new Joystick(1);
   private final XboxController xbox = new XboxController(0);
   
   public RobotContainer(){
@@ -74,6 +80,10 @@ public class RobotContainer {
 
     new JoystickButton(xbox, 7).onTrue(new ClawClosed(clawSubsystem));
     new JoystickButton(xbox, 8).onTrue(new ClawOpen(clawSubsystem));
+
+    new JoystickButton(operJoystick, 1).onTrue(new ArmMid(armSubsystem));
+    new JoystickButton(operJoystick, 2).onTrue(new ArmHigh(armSubsystem));
+    new JoystickButton(operJoystick, 3).onTrue(new ArmZeroPosition(armSubsystem));
   }
 
   public Command getAutonomousCommand(){

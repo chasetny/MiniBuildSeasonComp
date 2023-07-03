@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  CANSparkMax elev_Motor = new CANSparkMax(6, MotorType.kBrushless);
+  CANSparkMax elev_Motor = new CANSparkMax(ElevatorConstants.elevatorMotorID, MotorType.kBrushless);
   RelativeEncoder elev_Encoder = elev_Motor.getEncoder();
   PIDController elev_pidController = new PIDController(0.4, 0, 0);
   double desired_position = 0;
