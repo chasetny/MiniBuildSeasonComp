@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -22,7 +23,7 @@ public final class Constants {
     
       public static final double kWheelDiameterMeters = 0.1016;
       public static final double kDriveMotorGearRatio = 1 / 6.75;
-      public static final double kTurningMotorGearRatio = 1/21.538;
+      public static final double kTurningMotorGearRatio = 1/21.338;
       public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
       public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
       public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
@@ -45,13 +46,13 @@ public final class Constants {
 
     public static final int kFrontLeftDriveMotorPort = 40;
     public static final int kFrontRightDriveMotorPort = 10;
-    public static final int kBackLeftDriveMotorPort = 46;
+    public static final int kBackLeftDriveMotorPort = 1; //46
     public static final int kBackRightDriveMotorPort = 47;
 
     public static final int kFrontLeftTurningMotorPort = 14;
     public static final int kFrontRightTurningMotorPort = 5;
     public static final int kBackLeftTurningMotorPort = 36;
-    public static final int kBackRightTurningMotorPort = 6;
+    public static final int kBackRightTurningMotorPort = 37; //6
 
     public static final int kFrontLeftDriveAbsoluteEncoderPort = 1;
     public static final int kFrontRightDriveAbsoluteEncoderPort = 2;
@@ -85,5 +86,23 @@ public final class Constants {
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+
 }
+  public static final class AutoConstants {
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+      new TrapezoidProfile.Constraints(
+        2, 
+        1);
+  }
+
+  public static final class ClawConstants {
+  }
+
+  public static final class IntakeConstants {
+
+  }
+
+  public static final class ElevatorConstants {
+
+  }
 }

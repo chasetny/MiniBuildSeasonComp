@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -53,7 +54,7 @@ public class SwerveSubsystem extends SubsystemBase{
             DriveConstants.kBackRightTurningMotorReversed);
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
-    
+
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), 
@@ -85,6 +86,19 @@ public class SwerveSubsystem extends SubsystemBase{
         return Rotation2d.fromDegrees(getHeading());
     }
 
+    public Pose2d getPose(){
+        return odometry.getPoseMeters();
+        
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        odometry.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+            frontLeft.getPosition(), 
+            frontRight.getPosition(), 
+            backLeft.getPosition(), 
+            backRight.getPosition()}, pose);
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -93,8 +107,9 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("absoluteEncoderReadingBL", new CANCoder(0).getAbsolutePosition());
         SmartDashboard.putNumber("absoluteEncoderReadingBR", new CANCoder(3).getAbsolutePosition());
         
-        
-
+        odometry.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Angle", getPose().getRotation().toString());
     }
 
     public void stopModules(){
