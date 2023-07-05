@@ -47,10 +47,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  // private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
 
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick operJoystick = new Joystick(1);
@@ -64,26 +64,26 @@ public class RobotContainer {
       () -> driverJoystick.getRawAxis(4)
     ));
 
-    intakeSubsystem.setDefaultCommand(new IntakeZero(intakeSubsystem));
+    //intakeSubsystem.setDefaultCommand(new IntakeZero(intakeSubsystem));
     configureButtonBindings();
   }
 
   public void configureButtonBindings(){
 
-    new JoystickButton(xbox, 1).onTrue(new ElevatorZeroPosition(elevatorSubsystem));
-    new JoystickButton(xbox, 2).onTrue(new ElevatorLowPosition(elevatorSubsystem));
-    new JoystickButton(xbox, 3).onTrue(new ElevatorMidPosition(elevatorSubsystem));
-    new JoystickButton(xbox, 4).onTrue(new ElevatorHighPosition(elevatorSubsystem));
+    // new JoystickButton(xbox, 1).onTrue(new ElevatorZeroPosition(elevatorSubsystem));
+    // new JoystickButton(xbox, 2).onTrue(new ElevatorLowPosition(elevatorSubsystem));
+    // new JoystickButton(xbox, 3).onTrue(new ElevatorMidPosition(elevatorSubsystem));
+    // new JoystickButton(xbox, 4).onTrue(new ElevatorHighPosition(elevatorSubsystem));
 
-    new JoystickButton(xbox, 5).whileTrue(new IntakeForward(intakeSubsystem));
-    new JoystickButton(xbox, 6).whileTrue(new IntakeReverse(intakeSubsystem));
+    // new JoystickButton(xbox, 5).whileTrue(new IntakeForward(intakeSubsystem));
+    // new JoystickButton(xbox, 6).whileTrue(new IntakeReverse(intakeSubsystem));
 
-    new JoystickButton(xbox, 7).onTrue(new ClawClosed(clawSubsystem));
-    new JoystickButton(xbox, 8).onTrue(new ClawOpen(clawSubsystem));
+    // new JoystickButton(xbox, 7).onTrue(new ClawClosed(clawSubsystem));
+    // new JoystickButton(xbox, 8).onTrue(new ClawOpen(clawSubsystem));
 
-    new JoystickButton(operJoystick, 1).onTrue(new ArmMid(armSubsystem));
-    new JoystickButton(operJoystick, 2).onTrue(new ArmHigh(armSubsystem));
-    new JoystickButton(operJoystick, 3).onTrue(new ArmZeroPosition(armSubsystem));
+    // new JoystickButton(operJoystick, 1).onTrue(new ArmMid(armSubsystem));
+    // new JoystickButton(operJoystick, 2).onTrue(new ArmHigh(armSubsystem));
+    // new JoystickButton(operJoystick, 3).onTrue(new ArmZeroPosition(armSubsystem));
   }
 
   public Command getAutonomousCommand(){
@@ -91,24 +91,25 @@ public class RobotContainer {
     Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
-        new Translation2d(0, -1),
-        new Translation2d(0, -1.5)
+        new Translation2d(-1, 0.01),
+        new Translation2d(-1, -1),
+        new Translation2d(0.01, -1)
+        
       ),
-      new Pose2d(0, -2, new Rotation2d(Math.PI)), 
-      new TrajectoryConfig(2, 1).setKinematics(DriveConstants.kDriveKinematics));
+      new Pose2d(0, 0, new Rotation2d(0)), 
+      new TrajectoryConfig(1.5, 4).setKinematics(DriveConstants.kDriveKinematics));
 
       Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, -2, new Rotation2d(Math.PI)), 
+      new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
-        new Translation2d(-1, -2),
-        new Translation2d(-2, -2)
+        new Translation2d(-0.1, 0.01)
       ),
-      new Pose2d(-3,-2, new Rotation2d(Math.PI/2)), 
-      new TrajectoryConfig(2, 1).setKinematics(DriveConstants.kDriveKinematics));
+      new Pose2d(-0.1,0, new Rotation2d(0)), 
+      new TrajectoryConfig(1.5, 4).setKinematics(DriveConstants.kDriveKinematics));
 
-      PIDController xController = new PIDController(1.3, 0, 0.05);
-      PIDController yController = new PIDController(1.3, 0, 0.05);
-      ProfiledPIDController thetaController = new ProfiledPIDController(1.3, 0, 0, AutoConstants.kThetaControllerConstraints);
+      PIDController xController = new PIDController(2, 0, 0.05);
+      PIDController yController = new PIDController(2, 0, 0.05);
+      ProfiledPIDController thetaController = new ProfiledPIDController(0.8, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
       SwerveControllerCommand swerveControllerCommand1 = new SwerveControllerCommand(
@@ -134,8 +135,6 @@ public class RobotContainer {
       return new SequentialCommandGroup(
         new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
         swerveControllerCommand1,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        swerveControllerCommand2,
         new InstantCommand(() -> swerveSubsystem.stopModules())
       );
 

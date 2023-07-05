@@ -34,40 +34,42 @@ public final class Constants {
 
   public static final class DriveConstants{
 
-    public static final double kTrackWidth = Units.inchesToMeters(28);
+    public static final double kTrackWidth = Units.inchesToMeters(26);
     // Distance between right and left wheels
-    public static final double kWheelBase = Units.inchesToMeters(28);
+    public static final double kWheelBase = Units.inchesToMeters(26);
     // Distance between front and back wheels
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+           
+            );
 
-    public static final int kFrontLeftDriveMotorPort = 40;
-    public static final int kFrontRightDriveMotorPort = 10;
-    public static final int kBackLeftDriveMotorPort = 4; //46
-    public static final int kBackRightDriveMotorPort = 47;
+    public static final int kFrontLeftDriveMotorPort = 49;
+    public static final int kFrontRightDriveMotorPort = 42;
+    public static final int kBackLeftDriveMotorPort = 7;
+    public static final int kBackRightDriveMotorPort = 10;
 
-    public static final int kFrontLeftTurningMotorPort = 14;
-    public static final int kFrontRightTurningMotorPort = 5;
-    public static final int kBackLeftTurningMotorPort = 36;
-    public static final int kBackRightTurningMotorPort = 37; //6
+    public static final int kFrontLeftTurningMotorPort = 2;
+    public static final int kFrontRightTurningMotorPort = 4;
+    public static final int kBackLeftTurningMotorPort = 1;
+    public static final int kBackRightTurningMotorPort = 3;
 
     public static final int kFrontLeftDriveAbsoluteEncoderPort = 1;
-    public static final int kFrontRightDriveAbsoluteEncoderPort = 2;
-    public static final int kBackLeftDriveAbsoluteEncoderPort = 0;
-    public static final int kBackRightDriveAbsoluteEncoderPort = 3;
+    public static final int kFrontRightDriveAbsoluteEncoderPort = 12;
+    public static final int kBackLeftDriveAbsoluteEncoderPort = 13;
+    public static final int kBackRightDriveAbsoluteEncoderPort = 11;
 
     public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
-    public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
     public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
+    public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
     public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 56.9074;
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = -38.06875; 
-    public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 15.63875;
-    public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = -150.42;
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = -145.4;
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = -54.57; 
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = -231.858;
+    public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = -253.3;
 
     public static final boolean kFrontLeftDriveMotorReversed = false;
     public static final boolean kFrontRightDriveMotorReversed = false;
@@ -91,8 +93,8 @@ public final class Constants {
   public static final class AutoConstants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
       new TrapezoidProfile.Constraints(
-        2, 
-        1);
+        1.4, 
+        4);
   }
 
   public static final class ClawConstants {
@@ -101,16 +103,16 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int intakeMotorID = 0;
+    public static final int intakeMotorID = 58;
     public static final double intakeForwardSpeed = 0.5;
     public static final double intakeReverseSpeed = -0.5;
   }
 
   public static final class ElevatorConstants {
-    public static final int elevatorMotorID = 1;
+    public static final int elevatorMotorID = 57;
   }
 
   public static final class ArmConstants{
-    public static final int armMotorID = 6;
+    public static final int armMotorID = 56;
   }
 }

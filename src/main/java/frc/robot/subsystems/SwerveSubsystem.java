@@ -103,9 +103,9 @@ public class SwerveSubsystem extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("absoluteEncoderReadingFL", new CANCoder(1).getAbsolutePosition());
-        SmartDashboard.putNumber("absoluteEncoderReadingFR", new CANCoder(2).getAbsolutePosition());
-        SmartDashboard.putNumber("absoluteEncoderReadingBL", new CANCoder(0).getAbsolutePosition());
-        SmartDashboard.putNumber("absoluteEncoderReadingBR", new CANCoder(3).getAbsolutePosition());
+        SmartDashboard.putNumber("absoluteEncoderReadingFR", new CANCoder(12).getAbsolutePosition());
+        SmartDashboard.putNumber("absoluteEncoderReadingBL", new CANCoder(13).getAbsolutePosition());
+        SmartDashboard.putNumber("absoluteEncoderReadingBR", new CANCoder(11).getAbsolutePosition());
         
         odometry.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
