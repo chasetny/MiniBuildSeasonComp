@@ -8,6 +8,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -38,6 +41,7 @@ import frc.robot.commands.IntakeZero;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.SwerveStop;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -84,36 +88,35 @@ public class RobotContainer {
     // new JoystickButton(operJoystick, 1).onTrue(new ArmMid(armSubsystem));
     // new JoystickButton(operJoystick, 2).onTrue(new ArmHigh(armSubsystem));
     // new JoystickButton(operJoystick, 3).onTrue(new ArmZeroPosition(armSubsystem));
+    new JoystickButton(xbox, 1).toggleOnTrue(new SwerveStop(swerveSubsystem));
   }
 
   public Command getAutonomousCommand(){
+   
+    PathPlannerTrajectory mTrajectory = PathPlanner.loadPath(
+    "New New Path", 
+    4,
+    5);
     
-    Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      List.of(
-        new Translation2d(-1, 0.01),
-        new Translation2d(-1, -1),
-        new Translation2d(0.01, -1)
-        
-      ),
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      new TrajectoryConfig(1.5, 4).setKinematics(DriveConstants.kDriveKinematics));
 
-      Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      List.of(
-        new Translation2d(-0.1, 0.01)
-      ),
-      new Pose2d(-0.1,0, new Rotation2d(0)), 
-      new TrajectoryConfig(1.5, 4).setKinematics(DriveConstants.kDriveKinematics));
-
-      PIDController xController = new PIDController(2, 0, 0.05);
-      PIDController yController = new PIDController(2, 0, 0.05);
-      ProfiledPIDController thetaController = new ProfiledPIDController(0.8, 0, 0, AutoConstants.kThetaControllerConstraints);
+      PIDController xController = new PIDController(
+        3, 
+        0, 
+        0.1);
+      PIDController yController = new PIDController(
+        3, 
+        0, 
+        0.1);
+      ProfiledPIDController thetaController = new ProfiledPIDController(
+        0, 
+        0, 
+        0, 
+        AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
+      //Swerve Auto Commands
       SwerveControllerCommand swerveControllerCommand1 = new SwerveControllerCommand(
-        trajectory1,
+        mTrajectory,
         swerveSubsystem::getPose, 
         DriveConstants.kDriveKinematics, 
         xController,
@@ -122,103 +125,12 @@ public class RobotContainer {
         swerveSubsystem::setModuleStates, 
         swerveSubsystem); 
 
-        SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
-        trajectory2,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem); 
-
+      //Auto Routine
       return new SequentialCommandGroup(
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(mTrajectory.getInitialPose())),
         swerveControllerCommand1,
         new InstantCommand(() -> swerveSubsystem.stopModules())
       );
-
-      /* //Trajectory 2 (returning with cube)
-      Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(-4.73, 0, new Rotation2d(0)), 
-      List.of(
-        new Translation2d(-3.4, 0.01),
-        new Translation2d(-1.7, 0.01)
-      ),
-      new Pose2d(0, 0, new Rotation2d(Math.PI)), 
-      new TrajectoryConfig(1.2, 1).setKinematics(DriveConstants.kDriveKinematics));
-
-      //Trajectory 3 (going for second cube)
-      Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(Math.PI)), 
-      List.of(
-        new Translation2d(-1.7, 0.01),
-        new Translation2d(-2.9, 0.01),
-        new Translation2d(-3.9, 0.6)
-      ),
-      new Pose2d(-4.73, 1.2192, new Rotation2d(Math.PI/6)), 
-      new TrajectoryConfig(0.5, 1).setKinematics(DriveConstants.kDriveKinematics));
-
-      //Trajectory 4 (returning with second cube)
-      Trajectory trajectory4 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(-4.73, 1.2192, new Rotation2d(Math.PI/6)), 
-      List.of(
-        new Translation2d(-3.9, 0.6),
-        new Translation2d(-2.9, 0.01),
-        new Translation2d(-1.7, 0.01)
-      ),
-      new Pose2d(0, 0, new Rotation2d(Math.PI)), 
-      new TrajectoryConfig(0.5, 1).setKinematics(DriveConstants.kDriveKinematics));
-
-      //Trajectory 5 (moving to second scoring position)
-      Trajectory trajectory5 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(Math.PI)), 
-      List.of(
-        new Translation2d(0, 0.8)
-      ),
-      new Pose2d(0, 1.9, new Rotation2d(Math.PI)), 
-      new TrajectoryConfig(0.5, 1).setKinematics(DriveConstants.kDriveKinematics));
-      */
-
-      /*SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
-        trajectory2,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem);
-
-        SwerveControllerCommand swerveControllerCommand3 = new SwerveControllerCommand(
-        trajectory3,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem);
-
-        SwerveControllerCommand swerveControllerCommand4 = new SwerveControllerCommand(
-        trajectory4,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem);
-
-        SwerveControllerCommand swerveControllerCommand5 = new SwerveControllerCommand(
-        trajectory5,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem); */
   }
 
 }
