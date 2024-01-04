@@ -4,21 +4,11 @@
 
 package frc.robot;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +31,7 @@ import frc.robot.commands.IntakeZero;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.IntakeReverse;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.SwerveReset;
 import frc.robot.commands.SwerveStop;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
@@ -50,12 +41,14 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class RobotContainer {
 
+  //Subsystems
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  // private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
-  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  //  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  //  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  //  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  //  private final ArmSubsystem armSubsystem = new ArmSubsystem();
 
+  //Controls
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick operJoystick = new Joystick(1);
   private final XboxController xbox = new XboxController(0);
@@ -68,69 +61,71 @@ public class RobotContainer {
       () -> driverJoystick.getRawAxis(4)
     ));
 
-    //intakeSubsystem.setDefaultCommand(new IntakeZero(intakeSubsystem));
+   // intakeSubsystem.setDefaultCommand(new IntakeZero(intakeSubsystem));
     configureButtonBindings();
   }
 
   public void configureButtonBindings(){
 
-    // new JoystickButton(xbox, 1).onTrue(new ElevatorZeroPosition(elevatorSubsystem));
-    // new JoystickButton(xbox, 2).onTrue(new ElevatorLowPosition(elevatorSubsystem));
-    // new JoystickButton(xbox, 3).onTrue(new ElevatorMidPosition(elevatorSubsystem));
-    // new JoystickButton(xbox, 4).onTrue(new ElevatorHighPosition(elevatorSubsystem));
+                                          //Operator Controls//
+    //Elevator
+    //new JoystickButton(operJoystick, 1).onTrue(new ElevatorZeroPosition(elevatorSubsystem));
+    //new JoystickButton(operJoystick, 2).onTrue(new ElevatorLowPosition(elevatorSubsystem));
+    //new JoystickButton(operJoystick, 3).onTrue(new ElevatorMidPosition(elevatorSubsystem));
+    //new JoystickButton(operJoystick, 4).onTrue(new ElevatorHighPosition(elevatorSubsystem));
 
-    // new JoystickButton(xbox, 5).whileTrue(new IntakeForward(intakeSubsystem));
-    // new JoystickButton(xbox, 6).whileTrue(new IntakeReverse(intakeSubsystem));
+    //Arm
+    //new JoystickButton(operJoystick, 5).onTrue(new ArmMid(armSubsystem));
+    //new JoystickButton(operJoystick, 6).onTrue(new ArmHigh(armSubsystem));
+    //new JoystickButton(operJoystick, 7).onTrue(new ArmZeroPosition(armSubsystem));
 
-    // new JoystickButton(xbox, 7).onTrue(new ClawClosed(clawSubsystem));
-    // new JoystickButton(xbox, 8).onTrue(new ClawOpen(clawSubsystem));
 
-    // new JoystickButton(operJoystick, 1).onTrue(new ArmMid(armSubsystem));
-    // new JoystickButton(operJoystick, 2).onTrue(new ArmHigh(armSubsystem));
-    // new JoystickButton(operJoystick, 3).onTrue(new ArmZeroPosition(armSubsystem));
+                                          //Driver Controls//
+    //Intake
+    //new JoystickButton(xbox, 5).whileTrue(new IntakeForward(intakeSubsystem));
+    //new JoystickButton(xbox, 6).whileTrue(new IntakeReverse(intakeSubsystem));
+
+    //Claw
+    //new JoystickButton(xbox, 7).onTrue(new ClawClosed(clawSubsystem));
+    //new JoystickButton(xbox, 8).onTrue(new ClawOpen(clawSubsystem));
+
+    //Stop
     new JoystickButton(xbox, 1).toggleOnTrue(new SwerveStop(swerveSubsystem));
+    new JoystickButton(xbox, 2).onTrue(new SwerveReset(swerveSubsystem));
+
   }
 
   public Command getAutonomousCommand(){
    
+    //Loading Path Planner
     PathPlannerTrajectory mTrajectory = PathPlanner.loadPath(
     "New New Path", 
     4,
     5);
     
-
-      PIDController xController = new PIDController(
-        3, 
-        0, 
-        0.1);
-      PIDController yController = new PIDController(
-        3, 
-        0, 
-        0.1);
-      ProfiledPIDController thetaController = new ProfiledPIDController(
-        0, 
-        0, 
-        0, 
-        AutoConstants.kThetaControllerConstraints);
+    //Auto PID Controllers
+    PIDController xController = new PIDController(3, 0, 0.1);
+    PIDController yController = new PIDController(3, 0, 0.1);
+    ProfiledPIDController thetaController = new ProfiledPIDController(0, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-      //Swerve Auto Commands
-      SwerveControllerCommand swerveControllerCommand1 = new SwerveControllerCommand(
-        mTrajectory,
-        swerveSubsystem::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController, 
-        swerveSubsystem::setModuleStates, 
-        swerveSubsystem); 
+    //Swerve Auto Commands
+    SwerveControllerCommand swerveControllerCommand1 = new SwerveControllerCommand(
+      mTrajectory,
+      swerveSubsystem::getPose, 
+      DriveConstants.kDriveKinematics, 
+      xController,
+      yController,
+      thetaController, 
+      swerveSubsystem::setModuleStates, 
+      swerveSubsystem); 
 
-      //Auto Routine
-      return new SequentialCommandGroup(
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(mTrajectory.getInitialPose())),
-        swerveControllerCommand1,
-        new InstantCommand(() -> swerveSubsystem.stopModules())
-      );
+    //Auto Routine
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(mTrajectory.getInitialPose())),
+      swerveControllerCommand1,
+      new InstantCommand(() -> swerveSubsystem.stopModules())
+    );
   }
 
 }

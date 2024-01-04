@@ -40,7 +40,7 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute(){
 
-        double xSpeed = xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.get(), 0.02)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        double xSpeed = xLimiter.calculate(MathUtil.applyDeadband(xSpdFunction.get(), 0.07)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         double ySpeed = yLimiter.calculate(MathUtil.applyDeadband(ySpdFunction.get(), 0.02)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         double turningSpeed = turningLimiter.calculate(MathUtil.applyDeadband(turningSpdFunction.get(), 0.02)) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 

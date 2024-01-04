@@ -4,15 +4,8 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -91,8 +84,8 @@ public static final class DriveConstants{
   public static final double kPhysicalMaxSpeedMetersPerSecond = 4.96824;
   public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-  public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 0.25;
-  public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
+  public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 0.5;
+  public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.5;
   public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
   public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 }
@@ -144,6 +137,6 @@ public static final class DriveConstants{
   }
 
   public static final class ArmConstants{
-    public static final int armMotorID = 56;
+    public static final int armMotorID = 56; 
   }
 }
